@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A2Q2</title>
+	
+    <script type="text/javascript" src="webgl-utils.js"></script>
+    <script type="text/javascript" src="initShaders.js"></script>
+    <script type="text/javascript" src="MVnew.js"></script>
+    <script type="text/javascript" src="A2Q2.js"></script>
+	
+	<script>
+	function q2()
+	{
+		var x = document.getElementById("x").value;		
+		var y = document.getElementById("y").value;		
+		var m = document.getElementById("m").value;		
+		var h = document.getElementById("h").value;
+		
+		var v1 = vec2(x, y);
+		var p = PointReflection2D(m,h,v1);
+
+		document.getElementById("show").innerHTML = "p' is :"+p;
+	}
+</script>
+</head>
+
+<body>
+ <h1>Please open debug console to check the result</h1>
+  <h4> 	suppose P'(Xp',Yp') is a reflect point of P( Xp,Yp), so we have PP' is perpendicular to the line of y = mx + h .So the slope of PP' is (-1/m). 
+	Also the middle point of PP' should excetly on the line y = mx + h due to P' is 
+	a reflect point of P , so the distance between P to y = mx +h should equally to 
+	y = mx +h to P', so the middle point ((Xp+Xp')/2 , (Yp+Yp')/2) should on y = mx +h,
+	so we have to function, 
+	1 -> (Yp'-Yp)/(Xp'-Xp) = -1/m
+	2 -> (Yp+Yp')/2 = ((Xp +Xp')/2)*m +h
+	
+	slove equation 1 and 2, we can find Xp' and Yp' </h4>
+	
+	Xp:<input type="text" id="x"><br>
+	Yp:<input type="text" id="y"><br>
+	m:<input type="text" id="m"><br>
+	h:<input type="text" id="h"><br>
+	
+
+	<button type="button" onclick ="q2()">Run</button><br>
+	
+	<p id="show">______</p>
+	
+</body>
+</html>

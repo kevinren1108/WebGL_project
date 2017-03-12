@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>L4E2</title>
+
+    <!-- This in-line script is a vertex shader resource
+         Shaders can be linked from an external file as well. -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+//diffuse and ambient multi-light shader
+
+//inputs
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+
+//outputs
+varying vec4 color;
+
+//structs
+struct _light
+{
+    vec4 diffuse;
+    vec4 ambient;
+    vec4 position;
+};
+
+struct _material
+{
+    vec4 diffuse;
+    vec4 ambient;
+};
+
+//constants
+const int n = 1; // number of lights
+
+//uniforms
+uniform mat4 p;     // perspective matrix
+uniform mat4 mv;    // modelview matrix
+uniform bool lighting;  // to enable and disable lighting
+uniform vec4 uColor;    // colour to use when lighting is disabled
+uniform _light light[n]; // properties for the n lights
+uniform _material material; // material properties
+
+//globals
+vec4 mvPosition; // unprojected vertex position
+vec3 N; // fixed surface normal
+
+//prototypes
+vec4 lightCalc(in _light light);
+
+void main() 
+{
+  //Transform the point
+  mvPosition = mv*vPosition;  //mvPosition is used often
+  gl_Position = p*mvPosition; 
+
+  if (lighting == false) 
+  {
+	color = uColor;
+  }
+  else
+  {
+    //Make sure the normal is actually unit length, 
+    //and isolate the important coordinates
+    N = normalize((mv*vec4(vNormal,0.0)).xyz);
+    
+    //Combine colors from all lights
+    color.rgb = vec3(0,0,0);
+    for (int i = 0; i < n; i++)
+    {
+        color += lightCalc(light[i]);
+    }
+    color.a = 1.0; //Override alpha from light calculations
+  }
+}
+
+vec4 lightCalc(in _light light)
+{
+  //Set up light direction for positional lights
+  vec3 L;
+  
+  //If the light position is a vector, use that as the direction
+  if (light.position.w == 0.0) 
+    L = normalize(light.position.xyz);
+  //Otherwise, the direction is a vector from the current vertex to the light
+  else
+    L = normalize(light.position.xyz - mvPosition.xyz);
+
+  //Calculate diffuse coefficient
+  float Kd = max(dot(L,N), 0.0);
+
+  //Calculate colour for this light
+  vec4 color = Kd * material.diffuse * light.diffuse
+               + material.ambient * light.ambient;
+               
+  return color;
+}
+    </script>
+
+    <!-- This in-line script is a fragment shader resource.
+         Shaders can be linked from an external file as well. -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+    	precision mediump float;
+    	varying vec4 color;
+    	void main() 
+    	{ 
+            gl_FragColor = color;
+    	}
+    </script>
+
+    <!-- These are external javascript files. 
+         The first three are the textbook libraries.
+         The last one is your own javascript code. Make sure to change the name 
+         to match your javascript file. -->
+    <script type="text/javascript" src="../Common/webgl-utils.js"></script>
+    <script type="text/javascript" src="../Common/initShaders.js"></script>
+    <script type="text/javascript" src="../Common/MVnew.js"></script>
+    <script type="text/javascript" src="../Common/uofrGraphics.js"></script>
+    <script type="text/javascript" src="L4E2.js"></script>
+</head>
+
+<body>
+    <!-- This is the canvas - the only HTML element that can render WebGL 
+         graphics. You can have more than one WebGL canvas on a web page, but
+         that gets tricky. Stick to one per page for now. -->
+    <canvas id="gl-canvas" width="512" height="512">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+</body>
+</html>

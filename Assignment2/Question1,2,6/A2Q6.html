@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Boxes</title>
+
+    <!-- This in-line script is a vertex shader resource
+         Shaders can be linked from an external file as well. -->
+    <script id="vertex-shader" type="x-shader/x-vertex">
+         attribute vec3 vPosition;
+         attribute vec4 vColor;
+         uniform mat4 p,mv;
+         varying vec4 color;
+         
+         uniform vec4 uColor;
+         
+         void main() 
+         {
+              gl_Position = p * mv * vec4(vPosition,1);
+              // color = vColor; 
+              color = uColor; 
+         }
+    </script>
+
+    <!-- This in-line script is a fragment shader resource.
+         Shaders can be linked from an external file as well. -->
+    <script id="fragment-shader" type="x-shader/x-fragment">
+    	precision mediump float;
+    	varying vec4 color;
+    	void main() 
+    	{ 
+            gl_FragColor = color;
+    	}
+    </script>
+
+    <!-- These are external javascript files. 
+         The first three are the textbook libraries.
+         The last one is your own javascript code. Make sure to change the name 
+         to match your javascript file. -->
+    <script type="text/javascript" src="webgl-utils.js"></script>
+    <script type="text/javascript" src="initShaders.js"></script>
+    <script type="text/javascript" src="MVnew.js"></script>
+    <script type="text/javascript" src="A2Q6.js"></script>
+</head>
+
+<body>
+    <!-- This is the canvas - the only HTML element that can render WebGL 
+         graphics. You can have more than one WebGL canvas on a web page, but
+         that gets tricky. Stick to one per page for now. -->
+    <canvas id="gl-canvas" width="512" height="512">
+        Oops ... your browser doesn't support the HTML5 canvas element
+    </canvas>
+</body>
+</html>

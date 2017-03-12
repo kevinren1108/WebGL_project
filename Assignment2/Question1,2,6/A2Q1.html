@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>A2Q1</title>
+	
+    <script type="text/javascript" src="webgl-utils.js"></script>
+    <script type="text/javascript" src="initShaders.js"></script>
+    <script type="text/javascript" src="MVnew.js"></script>
+    <script type="text/javascript" src="A2Q1.js"></script>
+	<script>
+	function q1(){
+		
+		var x1 = document.getElementById("x1").value;		
+		var y1 = document.getElementById("y1").value;	
+		var z1 = document.getElementById("z1").value;				
+		var x2 = document.getElementById("x2").value;		
+		var y2 = document.getElementById("y2").value;		
+		var z2 = document.getElementById("z2").value;
+		
+		var v1 = vec3(x1, y1, z1);
+		var v2 = vec3(x2, y2, z2);
+		
+		var dotResult = DotProduct(v1, v2);
+		var angleResult = FindAngle(v1, v2);
+		var crossResult = CrossProduct(v1, v2);
+		
+		document.getElementById("showDot").innerHTML = dotResult;
+		document.getElementById("showAngle").innerHTML = angleResult;
+		document.getElementById("showCross").innerHTML = crossResult;
+	}
+</script>
+</head>
+
+<body>
+Please enter x,y,z value of first vector <br>
+x:<input type="text" id="x1"><br>
+y:<input type="text" id="y1"><br>
+z:<input type="text" id="z1"><br>
+Please enter x,y,z value of second vector <br>
+x:<input type="text" id="x2"><br>
+y:<input type="text" id="y2"><br>
+z:<input type="text" id="z2"><br>
+<button type="button" onclick ="q1()">Run</button><br>
+
+Dot product result: <p id="showDot">______</p>
+Angle: <p id="showAngle">______</p>
+Cross product result: <p id="showCross">______</p>
+</body>
+</html>
